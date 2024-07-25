@@ -68,7 +68,7 @@ resource "azurerm_network_interface" "my_terraform_nic" {
 # Connect the security group to the network interface
 resource "azurerm_network_interface_security_group_association" "example" {
   network_interface_id      = azurerm_network_interface.my_terraform_nic.id
-  network_security_group_id = azurerm_network_security_group.my_terraform_nsg.id
+  network_security_group_id = azurerm_network_security_group.AzDevOpsAgentsNSG.id
 }
 
 ## Generate random text for a unique storage account name
@@ -98,7 +98,8 @@ resource "azurerm_linux_virtual_machine" "my_terraform_vm" {
   network_interface_ids = [azurerm_network_interface.my_terraform_nic.id]
   size                  = "Standard_DS1_v2"
 #user data to prepare the myVM
-  user_data     =  "${file("prepare_linux_agent.sh")}"
+# only works on AWS  user_data     =  "${file("prepare_linux_agent.sh")}"
+  custom_data = filebase64("prepare_linux_agent.sh")
 
   os_disk {
     name                 = "myOsDisk"
