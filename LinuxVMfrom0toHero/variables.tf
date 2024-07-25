@@ -40,7 +40,7 @@ variable "username" {
 }
 
 variable "azurerm_network_security_group" {
-  default     = terraformNSG
+  default     = "terraformNSG"
   type        = string
   description = "Name of the NSG for terraform resources"
 }

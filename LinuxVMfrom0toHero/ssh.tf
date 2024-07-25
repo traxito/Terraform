@@ -6,16 +6,16 @@ resource "tls_private_key" "terraform_private_key" {
 
 #send keys to Azure Vault
 
-resource azurerm_key_vault_secret "var.azurerm_key_vault.name" {
-  key_vault_id = azurerm_key_vault.terraform_private_key.id
-  name         = "ssh-public"
-  value        = tls_private_key.terraform_private_key.public_key_openssh
-}
-
-resource azurerm_key_vault_secret "var.azurerm_key_vault.name" {
-  key_vault_id = azurerm_key_vault.terraform_private_key.id
+resource azurerm_key_vault_secret ssh_private_key {
+  key_vault_id = var.azurerm_key_vault.default.id
   name         = "ssh-private"
   value        = tls_private_key.terraform_private_key.private_key_pem
+}
+
+resource azurerm_key_vault_secret ssh_public_key {
+  key_vault_id = var.azurerm_key_vault.default.id
+  name         = "ssh-public"
+  value        = tls_private_key.terraform_public_key.public_key_openssh
 }
 
 # Output the public key
