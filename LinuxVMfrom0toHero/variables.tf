@@ -61,3 +61,8 @@ variable "kv-name" {
   type        = string
   description = "Name of the Log analytics for terraform resources"
 }
+
+variable "snet-name" {
+  type        = string
+  description = "Name of the subnet for terraform resources"
+}

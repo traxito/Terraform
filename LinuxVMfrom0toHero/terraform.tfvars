@@ -1,11 +1,12 @@
 #variables
 
-rg-name = "terraformRG"
+rg-name = "terraformrg"
 location = "westeurope"
 username = "azureadmin"
-nsg-name = "terraformNSG"
-vnet-name = "terraformVNET"
-st-name = "terraformStorageAccount"
-log-name = "terraformLogAnalytics"
-kv-name = "TerraformKeyVault"
+nsg-name = "terraformnsg"
+vnet-name = "terraformvnet"
+st-name = "terraformstorageaccount"
+log-name = "terraformloganalytics"
+kv-name = "terraformkeyvault"
+snet-name = "terraformsubnet"
 

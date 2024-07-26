@@ -15,10 +15,10 @@ resource azurerm_key_vault_secret ssh_private_key {
 resource azurerm_key_vault_secret ssh_public_key {
   key_vault_id = var.kv-name  
   name         = "ssh-public"
-  value        = tls_private_key.terraform_public_key.public_key_openssh
+  value        = tls_private_key.terraform_private_key.public_key_openssh
 }
 
 # Output the public key
 output "ssh-public" {
-  value = tls_private_key.ssh_key.ssh-public_openssh
+  value = tls_private_key.terraform_private_key.public_key_openssh 
 }

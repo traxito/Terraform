@@ -7,7 +7,7 @@ resource "azurerm_network_interface" "NIC" {
 
   ip_configuration {
     name                          = "PIP"
-    subnet_id                     = azurerm_subnet.subnet1.id
+    subnet_id                     = azurerm_subnet.snet-name.id  
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id = azurerm_public_ip.PIP.id
   }
@@ -20,7 +20,7 @@ resource "azurerm_network_interface" "NIC" {
 #VM configuration
 
 resource "azurerm_linux_virtual_machine" "TerraformLinuxVM" {
-  name                = "vm${random_string.TerraformLinuxVM.result}"
+  name                = "vm${random_integer.TerraformLinuxVM.result}"
   resource_group_name = var.rg-name
   location            = var.location
   size                = "Standard_DS2_v2"
@@ -28,11 +28,6 @@ resource "azurerm_linux_virtual_machine" "TerraformLinuxVM" {
   network_interface_ids = [
     azurerm_network_interface.NIC.id,
   ]
-##està bé??????????????????????????????????????????
-  admin_ssh_key {
-    username   = var.username     
-    public_key = file("~/.ssh/id_rsa.pub")
-  }
 
   os_disk {
     caching              = "ReadWrite"
@@ -53,7 +48,7 @@ resource "azurerm_linux_virtual_machine" "TerraformLinuxVM" {
 }
 
 #Data block always create a new block!
-  data azurerm_key_vault main {
+  data azurerm_key_vault kv-name {
   name                = var.kv-name 
   resource_group_name = var.rg-name
 }

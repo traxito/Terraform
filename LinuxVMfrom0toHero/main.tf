@@ -1,18 +1,55 @@
+#store tenant ID
+data "azurerm_client_config" "current" {}
 
 #uses RG already created
-
 data "azurerm_resource_group" "TerraformRG" {
-  name = var.azurerm_resource_group.default
-  location = var.resource_group_location.default
-
-      tags = {
-    environment = "Terraform"
-  }
+  name = var.rg-name
+# since it's already created, it's not needed to set up the location
+ # location = var.location 
 }
 
-output "id" {
-  value = data.var.azurerm_resource_group.id
+#creation of the azure key vault
+
+
+resource "azurerm_key_vault" "TerraformKV" {
+  name                        = var.kv-name
+  location                    = var.location
+  resource_group_name         = var.rg-name
+  tenant_id                   = data.azurerm_client_config.current.tenant_id
+  soft_delete_retention_days  = 7
+  purge_protection_enabled    = false
+
+  sku_name = "standard"
+
+
+  #access_policy {
+  #  #key_vault_id = azurerm_key_vault.TerraformKV.id
+  #  tenant_id = data.azurerm_client_config.current.tenant_id
+  #  object_id = data.azurerm_client_config.current.object_id
+  #
+  #  secret_permissions = [
+  #    "Backup", "Delete", "Get", "List", "Purge", "Recover", "Restore", "Set"
+  #  ]
+  #
+  #}
+  #
 }
+  resource azurerm_key_vault_access_policy terraform_user {
+    key_vault_id = azurerm_key_vault.TerraformKV.id
+    tenant_id    = data.azurerm_client_config.current.tenant_id
+    object_id    = data.azurerm_client_config.current.object_id
+
+    secret_permissions = [
+      "Backup", "Delete", "Get", "List", "Purge", "Recover", "Restore", "Set"
+  ]
+
+}
+
+
+#dona conflicte:  A data resource "azurerm_resource_group" "id" has not been declared in the root module.
+# output "id" {
+#   value = data.azurerm_resource_group.id
+# }
 
 #creation of net and subnets
 
@@ -54,15 +91,14 @@ resource azurerm_virtual_network "terraformVNET" {
   resource_group_name = var.rg-name
   address_space       = ["20.0.0.0/16"]
 
-  subnet {
-    name           = "subnet1"
-    address_prefix = "20.0.2.0/24"
-    security_group = var.nsg-name
-  }
+}
 
-  tags = {
-    environment = "Terraform"
-  }
+  resource azurerm_subnet snet-name {
+  name                 = var.snet-name  
+  resource_group_name  = var.rg-name
+  virtual_network_name = var.vnet-name  
+  address_prefixes     = ["20.0.2.0/24"]
+  
 }
 
 #Public IP configuration
@@ -90,40 +126,6 @@ resource "azurerm_storage_account" "TerraformStorage" {
     environment = "Terraform"
   }
 
-}
-
-#creation of the azure key vault
-
-resource "azurerm_key_vault" "TerraformKV" {
-  name                        = var.kv-name
-  location                    = var.location
-  resource_group_name         = var.rg-name
-  tenant_id                   = data.azurerm_client_config.current.tenant_id
-  soft_delete_retention_days  = 7
-  purge_protection_enabled    = false
-
-  sku_name = "standard"
-
-#Aqui el codi es diferent al exemple que teniM
-#data azurerm_client_config current {}
-
-  access_policy {
-    #key_vault_id = azurerm_key_vault.var.azurerm_key_vault.id
-    tenant_id = data.azurerm_client_config.current.tenant_id
-    object_id = data.azurerm_client_config.current.object_id
-
-    key_permissions = [
-      "Backup", "Create", "Decrypt", "Delete", "Encrypt", "Get", "Import", "List", "Purge", "Recover", "Restore", "Sign", "UnwrapKey", "Update", "Verify", "WrapKey", "Release", "Rotate", "GetRotationPolicy", "SetRotationPolicy"
-    ]
-
-    secret_permissions = [
-      "Backup", "Delete", "Get", "List", "Purge", "Recover", "Restore", "Set"
-    ]
-
-    storage_permissions = [
-      "Backup", "Delete", "DeleteSAS", "Get", "GetSAS", "List", "ListSAS", "Purge", "Recover", "RegenerateKey", "Restore", "Set", "SetSAS", "Update"
-    ]
-  }
 }
 
 #creation of log analitics
