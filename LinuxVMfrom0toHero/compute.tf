@@ -2,8 +2,8 @@
 
 resource "azurerm_network_interface" "NIC" {
   name                = "nic-vm${random_string.NIC.result}"
-  location            = "var.resource_group_location"
-  resource_group_name = "var.resourge_group_name"
+  location            = var.location
+  resource_group_name = var.rg-name
 
   ip_configuration {
     name                          = "PIP"
@@ -21,16 +21,16 @@ resource "azurerm_network_interface" "NIC" {
 
 resource "azurerm_linux_virtual_machine" "TerraformLinuxVM" {
   name                = "vm${random_string.TerraformLinuxVM.result}"
-  resource_group_name = "var.resourge_group_name"
-  location            = "var.resource_group_location"
+  resource_group_name = var.rg-name
+  location            = var.location
   size                = "Standard_DS2_v2"
-  admin_username      = "adminuser"
+  admin_username      = var.username
   network_interface_ids = [
     azurerm_network_interface.NIC.id,
   ]
 ##està bé??????????????????????????????????????????
   admin_ssh_key {
-    username   = "adminuser"
+    username   = var.username     
     public_key = file("~/.ssh/id_rsa.pub")
   }
 
@@ -54,6 +54,6 @@ resource "azurerm_linux_virtual_machine" "TerraformLinuxVM" {
 
 #Data block always create a new block!
   data azurerm_key_vault main {
-  name                = "var.azurerm_key_vault"
-  resource_group_name = "var.azurerm_resource_group"
+  name                = var.kv-name 
+  resource_group_name = var.rg-name
 }

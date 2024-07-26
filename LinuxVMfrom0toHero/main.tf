@@ -17,9 +17,9 @@ output "id" {
 #creation of net and subnets
 
 resource azurerm_network_security_group "TerraNSG" {
-  name                = var.azurerm_network_security_group.default
-  location            = var.resource_group_location.default
-  resource_group_name = var.azurerm_resource_group.default
+  name                = var.nsg-name
+  location            = var.location
+  resource_group_name = var.rg-name
 
   security_rule {
     name                       = "only_allow_machine_IP"
@@ -49,15 +49,15 @@ data "http" "myip" {
 #Azure VNET
 
 resource azurerm_virtual_network "terraformVNET" {
-  name                = var.azurerm_virtual_network.default
-  location            = var.resource_group_location.default
-  resource_group_name = var.azurerm_resource_group.default
+  name                = var.vnet-name
+  location            = var.location
+  resource_group_name = var.rg-name
   address_space       = ["20.0.0.0/16"]
 
   subnet {
     name           = "subnet1"
     address_prefix = "20.0.2.0/24"
-    security_group = var.azurerm_network_security_group.default
+    security_group = var.nsg-name
   }
 
   tags = {
@@ -68,8 +68,8 @@ resource azurerm_virtual_network "terraformVNET" {
 #Public IP configuration
 resource "azurerm_public_ip" "PIP" {
   name                = "PIP${random_string.PIP.result}"
-  resource_group_name = var.azurerm_resource_group.default
-  location            = var.resource_group_location.default
+  resource_group_name = var.rg-name
+  location            = var.location
   allocation_method   = "Static"
 
   tags = {
@@ -80,9 +80,9 @@ resource "azurerm_public_ip" "PIP" {
 #creation of the storage account
 
 resource "azurerm_storage_account" "TerraformStorage" {
-    name = var.azurerm_storage_account.default
-    location = var.resource_group_location.default
-    resource_group_name = var.resource_group_name.default
+    name = var.st-name
+    location = var.location
+    resource_group_name = var.rg-name
     account_tier             = "Standard"
     account_replication_type = "LRS"
 
@@ -95,9 +95,9 @@ resource "azurerm_storage_account" "TerraformStorage" {
 #creation of the azure key vault
 
 resource "azurerm_key_vault" "TerraformKV" {
-  name                        = var.azurerm_key_vault.default
-  location                    = var.resource_group.default
-  resource_group_name         = var.resource_group.default
+  name                        = var.kv-name
+  location                    = var.location
+  resource_group_name         = var.rg-name
   tenant_id                   = data.azurerm_client_config.current.tenant_id
   soft_delete_retention_days  = 7
   purge_protection_enabled    = false
