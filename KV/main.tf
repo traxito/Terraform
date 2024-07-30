@@ -6,7 +6,7 @@ resource azurerm_resource_group rg-alias {
     location = var.location 
 }
 
-resource "azurerm_storage_account" "alias_st" {
+resource azurerm_storage_account st-alias {
   name                     = var.st-name    
   resource_group_name      = var.rg-name 
   location                 = var.location  
@@ -19,7 +19,7 @@ resource "azurerm_storage_account" "alias_st" {
 }
 
 #RG and storage account are already created on the AzureMonitor TF part (folder)
-resource "azurerm_key_vault" "kv-alias" {
+resource azurerm_key_vault kv-alias {
   name                        = var.kv-name 
   location                    = var.location
   resource_group_name         = var.rg-name 
@@ -55,7 +55,7 @@ resource "azurerm_key_vault" "kv-alias" {
 resource "azurerm_monitor_diagnostic_setting" "diag-kv-alias" {
   name               = var.kv-name
   target_resource_id = azurerm_key_vault.kv-alias.id
-  storage_account_id = azurerm_storage_account.alias_st.id
+  storage_account_id = azurerm_storage_account.st-alias.id
 
   enabled_log {
     category = "AuditEvent"
