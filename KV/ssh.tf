@@ -9,14 +9,14 @@ resource "tls_private_key" "alias-ssh-key" {
 #send the keys to KV
 
 resource "azurerm_key_vault_secret" ssh_public_key {
-    key_vault_id = var.kv-name
+    key_vault_id = azurerm_key_vault.kv-alias.id
     name         = "ssh-public-key"
     value        = tls_private_key.alias-ssh-key.public_key_openssh
   
 }
 
 resource "azurerm_key_vault_secret" "ssh_private_key" {
-  key_vault_id = var.kv-name
+  key_vault_id = azurerm_key_vault.kv-alias.id
   name         = "ssh-private-key"
   value        = tls_private_key.alias-ssh-key.private_key_pem
 }
