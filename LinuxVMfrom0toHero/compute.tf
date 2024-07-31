@@ -26,7 +26,7 @@ resource azurerm_linux_virtual_machine TerraformLinuxVM {
   size                = "Standard_DS2_v2"
   admin_username      = var.username
   network_interface_ids = [
-    azurerm_network_interface.NIC.id,
+    azurerm_network_interface.NIC-alias.id,
   ]
 
   os_disk {
@@ -45,10 +45,4 @@ resource azurerm_linux_virtual_machine TerraformLinuxVM {
     environment = "Terraform"
   }
 
-}
-
-#Data block always create a new block!
-  data azurerm_key_vault kv-name {
-  name                = var.kv-name 
-  resource_group_name = var.rg-name
 }

@@ -67,11 +67,6 @@ variable "snet-name" {
   description = "Name of the subnet for terraform resources"
 }
 
-variable log-name {
-    type = string
-    description = "Caution alphanumeric only! Name of the Analytics Workspace"
-}
-
 variable diag-name {
     type = string
     description = "Name of the monitor_diagnostic_setting"

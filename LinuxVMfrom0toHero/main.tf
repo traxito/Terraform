@@ -105,7 +105,7 @@ data "azurerm_subscription" "current" {
 resource azurerm_monitor_diagnostic_setting alias_activity_logs {
   name                       = var.diag-name
   target_resource_id         = data.azurerm_subscription.current.id
-  storage_account_id         = azurerm_storage_account.alias_st.id
+  storage_account_id         = azurerm_storage_account.st-alias.id
   log_analytics_workspace_id = azurerm_log_analytics_workspace.alias_log.id
 
   enabled_log {
