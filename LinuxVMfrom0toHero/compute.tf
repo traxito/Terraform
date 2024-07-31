@@ -1,9 +1,9 @@
 #create NIC for the Linux VM
 
-resource "azurerm_network_interface" "NIC" {
+resource azurerm_network_interface NIC-alias {
   name                = "nic-vm${random_string.NIC.result}"
   location            = var.location
-  resource_group_name = var.rg-name
+  resource_group_name = azurerm_resource_group.rg-alias.name
 
   ip_configuration {
     name                          = "PIP"
@@ -19,9 +19,9 @@ resource "azurerm_network_interface" "NIC" {
 
 #VM configuration
 
-resource "azurerm_linux_virtual_machine" "TerraformLinuxVM" {
+resource azurerm_linux_virtual_machine TerraformLinuxVM {
   name                = "vm${random_integer.TerraformLinuxVM.result}"
-  resource_group_name = var.rg-name
+  resource_group_name = azurerm_resource_group.rg-alias.name
   location            = var.location
   size                = "Standard_DS2_v2"
   admin_username      = var.username

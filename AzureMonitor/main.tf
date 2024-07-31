@@ -5,7 +5,7 @@ resource azurerm_resource_group alias_rg {
   location = var.location   
 }
 
-resource "azurerm_storage_account" "alias_st" {
+resource azurerm_storage_account alias_st {
   name                     = var.st-name    
   resource_group_name      = var.rg-name 
   location                 = var.location  
@@ -17,6 +17,7 @@ resource "azurerm_storage_account" "alias_st" {
   }
 }
 
+#Creation of Log Analytics Workspace
 
 resource azurerm_log_analytics_workspace alias_log {
   name                = var.log-name    

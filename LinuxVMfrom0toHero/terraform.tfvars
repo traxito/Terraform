@@ -9,4 +9,5 @@ st-name = "terraformstorageaccount"
 log-name = "terraformloganalytics"
 kv-name = "terraformkeyvault"
 snet-name = "terraformsubnet"
+diag-name = "terraformlogsworkspace"
 
