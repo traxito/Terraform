@@ -17,6 +17,17 @@ resource azurerm_network_interface NIC-alias {
   }
 }
 
+#Get access to KV and push the public ssh key
+
+data azurerm_key_vault kv-alias {
+  name                = azurerm_key_vault.kv-alias.name
+  resource_group_name = azurerm_resource_group.rg-alias.name
+}
+data azurerm_key_vault_secret ssh_public_key {
+  name         = "ssh-public"
+  key_vault_id = data.azurerm_key_vault.kv-alias.id
+}
+
 #VM configuration
 
 resource azurerm_linux_virtual_machine TerraformLinuxVM {
@@ -39,6 +50,11 @@ resource azurerm_linux_virtual_machine TerraformLinuxVM {
     offer     = "0001-com-ubuntu-server-jammy"
     sku       = "22_04-lts"
     version   = "latest"
+  }
+
+    admin_ssh_key {
+    username   = var.username
+    public_key = data.azurerm_key_vault_secret.ssh_public_key.value
   }
 
   tags = {
