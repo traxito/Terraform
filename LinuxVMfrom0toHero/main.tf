@@ -3,16 +3,22 @@
 #store tenant ID
 data "azurerm_client_config" "current" {}
 
+#generate random numner for st name
+resource random_integer random-alias {
+  min = 1
+  max = 50000
+}
 #create brand new RG
 resource "azurerm_resource_group" "rg-alias" {
-  name     = "var.rg-name${random_id.rg-alias.result}"
+  name     = "var.rg-name${random_integer.random-alias.result}"
   location = var.location
 }
+
 
 #create brand new st account just for this VM
 
 resource "azurerm_storage_account" "st-alias" {
-  name                     = "var.st-name${random_id.st-alias.result}"
+  name                     = "var.st-name${random_integer.random-alias.result}"
   resource_group_name      = azurerm_resource_group.rg-alias.name
   location                 = azurerm_resource_group.rg-alias.location
   account_tier             = "Standard"
