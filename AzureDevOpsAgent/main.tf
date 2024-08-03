@@ -3,29 +3,23 @@
 #store tenant ID
 data "azurerm_client_config" "current" {}
 
-#generate random numner for st name
-resource random_integer random-alias {
-  min = 1
-  max = 50000
-}
 #create brand new RG
 resource "azurerm_resource_group" "rg-alias" {
-  name     = "var.rg-name${random_integer.random-alias.result}"
+  name     = var.rg-name
   location = var.location
 }
-
 
 #create brand new st account just for this VM
 
 resource "azurerm_storage_account" "st-alias" {
-  name                     = "var.st-name${random_integer.random-alias.result}"
+  name                     = var.st-name
   resource_group_name      = azurerm_resource_group.rg-alias.name
   location                 = azurerm_resource_group.rg-alias.location
   account_tier             = "Standard"
   account_replication_type = "LRS"
 
   tags = {
-    environment = "developer"
+    environment = var.environment 
   }
   
 }
@@ -72,8 +66,8 @@ resource azurerm_network_security_group "TerraNSG" {
 
 }
 
-    tags = {
-    environment = "Terraform"
+  tags = {
+    environment = var.environment 
   }
 }
 
@@ -91,7 +85,7 @@ resource "azurerm_public_ip" "PIP" {
   allocation_method   = "Static"
 
   tags = {
-    environment = "Terraform"
+    environment = var.environment 
   }
 }
 
@@ -103,6 +97,11 @@ resource azurerm_log_analytics_workspace alias_log {
   resource_group_name = var.rg-name 
   sku                 = "PerGB2018"
   retention_in_days   = 30
+
+    tags = {
+    environment = var.environment 
+  }
+
 }
 
 data "azurerm_subscription" "current" {
@@ -197,6 +196,10 @@ access_policy {
   ]
 
 }
+
+  tags = {
+    environment = var.environment 
+  }
 
 }
 

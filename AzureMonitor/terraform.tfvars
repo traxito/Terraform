@@ -1,0 +1,5 @@
+rg-name = "main"
+location = "westeurope"
+st-name = "stforazurelogs"
+log-name = "loganaliticsworkspace"
+diag-name = "main_diagnostic_logs"

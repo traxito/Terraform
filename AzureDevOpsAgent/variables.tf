@@ -71,3 +71,8 @@ variable diag-name {
     type = string
     description = "Name of the monitor_diagnostic_setting"
 }
+
+variable environment{
+  type = string
+  description = "name of the environtment of the AzDevOps Agent"
+}
