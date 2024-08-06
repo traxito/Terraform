@@ -1,0 +1,8 @@
+#rg-name = "windowsvmrg"
+location = "westeurope"
+vm-name = "windowsvm"
+nsg-name = "windowsnsg"
+vnet-name = "windowsvnet"
+st-name = "terraformtorageaccount"
+snet-name = "windowssubnet"
+environment = "Dev"
