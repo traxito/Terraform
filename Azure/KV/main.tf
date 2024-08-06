@@ -1,54 +1,132 @@
 
 data "azurerm_client_config" "current" {}
 
-resource azurerm_resource_group rg-alias {
-    name = var.rg-name  
-    location = var.location 
+#create brand new RG
+#name bust me UNIQUE and not random
+resource "azurerm_resource_group" "rg-alias" {
+  name     = var.rg-name
+  location = var.location
 }
 
-resource azurerm_storage_account st-alias {
-  name                     = var.st-name    
-  resource_group_name      = var.rg-name 
-  location                 = var.location  
+#create a st account
+#name bust me UNIQUE and not random
+resource "azurerm_storage_account" "st-alias" {
+  name                     = var.st-name
+  resource_group_name      = azurerm_resource_group.rg-alias.name
+  location                 = azurerm_resource_group.rg-alias.location
   account_tier             = "Standard"
   account_replication_type = "LRS"
 
   tags = {
-    environment = "Development"
+    kv = "st account"
   }
+
 }
 
-#RG and storage account are already created on the AzureMonitor TF part (folder)
-resource azurerm_key_vault kv-alias {
-  name                        = var.kv-name 
-  location                    = var.location
-  resource_group_name         = var.rg-name 
-  tenant_id                   = data.azurerm_client_config.current.tenant_id
-  soft_delete_retention_days  = 7
-  purge_protection_enabled    = false
+#Creation of Log Analytics Workspace
+
+resource "azurerm_log_analytics_workspace" "alias_log" {
+  name                = var.log-name
+  location            = var.location
+  resource_group_name = azurerm_resource_group.rg-alias.name
+  sku                 = "PerGB2018"
+  retention_in_days   = 30
+}
+
+data "azurerm_subscription" "current" {
+}
+
+resource "azurerm_monitor_diagnostic_setting" "alias_activity_logs" {
+  name                       = var.diag-name
+  target_resource_id         = data.azurerm_subscription.current.id
+  storage_account_id         = azurerm_storage_account.st-alias.id
+  log_analytics_workspace_id = azurerm_log_analytics_workspace.alias_log.id
+
+  enabled_log {
+    category = "Administrative"
+
+    retention_policy {
+      enabled = false
+    }
+  }
+  enabled_log {
+    category = "Security"
+
+    retention_policy {
+      enabled = false
+    }
+  }
+  enabled_log {
+    category = "ServiceHealth"
+
+    retention_policy {
+      enabled = false
+    }
+  }
+  enabled_log {
+    category = "Alert"
+
+    retention_policy {
+      enabled = false
+    }
+  }
+  enabled_log {
+    category = "Recommendation"
+
+    retention_policy {
+      enabled = false
+    }
+  }
+  enabled_log {
+    category = "Policy"
+
+    retention_policy {
+      enabled = false
+    }
+  }
+  enabled_log {
+    category = "Autoscale"
+
+    retention_policy {
+      enabled = false
+    }
+  }
+  enabled_log {
+    category = "ResourceHealth"
+
+    retention_policy {
+      enabled = false
+    }
+  }
+
+}
+
+#creation of the azure key vault
+
+
+resource "azurerm_key_vault" "kv-alias" {
+  name                       = var.kv-name
+  location                   = var.location
+  resource_group_name        = azurerm_resource_group.rg-alias.name
+  tenant_id                  = data.azurerm_client_config.current.tenant_id
+  soft_delete_retention_days = 7
+  purge_protection_enabled   = false
 
   sku_name = "standard"
 
+
   access_policy {
+    #key_vault_id = azurerm_key_vault.TerraformKV.id
     tenant_id = data.azurerm_client_config.current.tenant_id
     object_id = data.azurerm_client_config.current.object_id
 
-   # key_permissions = [
-   #   "Get",
-   # ]
-
-    #since we are only going to use secret permisions to see and retrieve SSH keys, we only need these one
-
     secret_permissions = [
-      "Get", "Backup", "Delete", "List", "Purge", "Recover", "Restore"
+      "Backup", "Delete", "Get", "List", "Purge", "Recover", "Restore", "Set"
     ]
 
-    # storage_permissions = [
-    #   "Get",
-    # ]
   }
-}
 
+}
 
 #configure audit of the KV
 

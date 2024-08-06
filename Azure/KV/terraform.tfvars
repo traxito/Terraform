@@ -1,4 +1,9 @@
-rg-name = "kv-rg"
+#name bust me UNIQUE and not random
+rg-name  = "kv-rg"
 location = "westeurope"
-st-name = "stforkvlogs"
-kv-name = "kv-principal"
+#name bust me UNIQUE and not random
+st-name     = "stforkvlogs"
+kv-name     = "kv-principal-Deltalab"
+log-name    = "terraformloganalytics"
+diag-name   = "terraformlogsworkspace"
+environment = "Dev"
