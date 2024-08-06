@@ -1,3 +1,4 @@
+
 #basic networking attributes
 resource "azurerm_virtual_network" "vnet-alias" {
   name                = var.vnet-name
@@ -43,7 +44,7 @@ data "http" "myip" {
 
 
 resource "azurerm_network_interface" "NIC-alias" {
-  name                = "nic-vm${random_string.random_name.result}"
+  name                = "nic-vm${random_string.random-name.result}"
   location            = var.location
   resource_group_name = azurerm_resource_group.rg-alias.name
 
@@ -55,7 +56,7 @@ resource "azurerm_network_interface" "NIC-alias" {
 }
 
 resource "azurerm_public_ip" "PIP" {
-  name                = "PIP${random_string.PIP.result}"
+  name                = "PIP${random_string.random-name.result}"
   resource_group_name = azurerm_resource_group.rg-alias.name
   location            = var.location
   allocation_method   = "Static"

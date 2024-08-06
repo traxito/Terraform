@@ -4,10 +4,15 @@ resource random_string random-name {
     length = 4
 }
 
+resource "random_integer" "random-alias" {
+  min = 1
+  max = 5000
+}
+
 #Template for basic Windows VM
 
 resource azurerm_resource_group rg-alias {
-  name     = var.vm-name[random_string.random-name.result]
+  name     = var.rg-name[random_string.random-name.result]
   location = var.location
 }
 
@@ -23,20 +28,39 @@ resource "azurerm_storage_account" "st-alias" {
   }
   
 }
+#we tell Terraform to connect to KV
+
+data "azurerm_key_vault" "kv-alias" {
+  name                = "kv-principal-Deltalab"
+  resource_group_name = "kv-rg"
+}
+
+#reference to already created admin username and password on KV
+
+data "azurerm_key_vault_secret" "kv-secret-alias" {
+  name         = "windows-local-admin-account"
+  key_vault_id = data.azurerm_key_vault.kv-alias.id
+}
+
+data "azurerm_key_vault_secret" "kv-secret-alias-2" {
+  name         = "windows-local-account-password"
+  key_vault_id = data.azurerm_key_vault.kv-alias.id
+}
 
 resource azurerm_windows_virtual_machine vm-alias {
   name                = var.vm-name[random_string.random-name.result]
   resource_group_name = azurerm_resource_group.rg-alias.name
   location            = var.location
   size                = "Standard_B2s"
-  admin_username      = "adminuser"
-  admin_password      = "P@$$w0rd1234!"
+#reference to already created admin username and password on KV
+  admin_username      = data.azurerm_key_vault_secret.kv-secret-alias.value
+  admin_password      = data.azurerm_key_vault_secret.kv-secret-alias-2.value
   enable_automatic_updates = false
   hotpatching_enabled = false
 #Specifies the type of on-premise license (also known as Azure Hybrid Use Benefit) which should be used for this Virtual Machine. Possible values are None, Windows_Client and Windows_Server
-  license_type = Windows_Server
-#Specifies the reboot setting for platform scheduled patching
-  reboot_setting = false
+  license_type = "Windows_Server"
+#Specifies the reboot setting for platform scheduled patching, "Always" "IfRequired" "Never"
+  reboot_setting = "Never"
 #Specifies if Secure Boot and Trusted Launch is enabled for the Virtual Machine. Changing this forces a new resource to be created.
   secure_boot_enabled = true
 #Specifies the Time Zone which should be used by the Virtual Machine: Romance Standard Time (UTC+1 Madrid)
@@ -47,7 +71,7 @@ resource azurerm_windows_virtual_machine vm-alias {
   }
 
   network_interface_ids = [
-    azurerm_network_interface.example.id,
+    azurerm_network_interface.NIC-alias.id,
   ]
 
   os_disk {
@@ -65,14 +89,4 @@ resource azurerm_windows_virtual_machine vm-alias {
     version   = "latest"
   }
 
-#Falta acavar aquesta part!!
-
-data azurerm_key_vault kv-alias
-
-  secret {
-    certificate {
-    }
-# The ID of the Key Vault from which all Secrets should be sourced.    
-    key_vault_id = azurerm_key_vault.key_vault_name.id
-  }
 }
