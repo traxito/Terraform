@@ -23,8 +23,11 @@ resource "random_integer" "TerraformLinuxVM" {
 
 
 variable "rg-name" {
-  type        = string
+  type        = map(string)
   description = "Name of the RG"
+  default = {
+    "rg-name" = "terraformrglinux"
+  }
 }
 
 variable "location" {
@@ -48,8 +51,11 @@ variable "vnet-name" {
 }
 
 variable "st-name" {
-  type        = string
+  type        = map(string)
   description = "Name of the storage account for terraform resources"
+  default = {
+    "st-name" = "terraformtorageaccount"
+  }
 }
 
 variable "log-name" {
@@ -70,4 +76,9 @@ variable "snet-name" {
 variable diag-name {
     type = string
     description = "Name of the monitor_diagnostic_setting"
+}
+
+variable environment{
+  type = string
+  description = "name of the environtment of the AzDevOps Agent"
 }

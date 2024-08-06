@@ -7,10 +7,11 @@ data "azurerm_client_config" "current" {}
 resource random_integer random-alias {
   min = 1
   max = 50000
+
 }
 #create brand new RG
 resource "azurerm_resource_group" "rg-alias" {
-  name     = "var.rg-name${random_integer.random-alias.result}"
+  name     = var.rg-name[random_integer.random-alias.result]
   location = var.location
 }
 
@@ -18,7 +19,7 @@ resource "azurerm_resource_group" "rg-alias" {
 #create brand new st account just for this VM
 
 resource "azurerm_storage_account" "st-alias" {
-  name                     = "var.st-name${random_integer.random-alias.result}"
+  name                     = var.st-name[random_integer.random-alias.result]
   resource_group_name      = azurerm_resource_group.rg-alias.name
   location                 = azurerm_resource_group.rg-alias.location
   account_tier             = "Standard"
@@ -100,7 +101,7 @@ resource "azurerm_public_ip" "PIP" {
 resource azurerm_log_analytics_workspace alias_log {
   name                = var.log-name    
   location            = var.location
-  resource_group_name = var.rg-name 
+  resource_group_name = azurerm_resource_group.rg-alias.name
   sku                 = "PerGB2018"
   retention_in_days   = 30
 }
