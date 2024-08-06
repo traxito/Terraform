@@ -1,5 +1,14 @@
 #We will make this TF plan to be independent from other TF's, to be able to work alone
 
+##per provar!!
+#variable per ep7
+#locals {
+#  name = "ep7" <---var.locals
+#}
+# name     = "rg-${local.name}-${random_string.main.result}"
+#
+# també mirar ${terraform.workspace} com a variable canviant de workspace segons sigui Dev Prod etc!
+
 #store tenant ID
 data "azurerm_client_config" "current" {}
 
