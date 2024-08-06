@@ -1,0 +1,5 @@
+location = "westeurope"
+#rg_alias = "aks_rg_name"
+aks-name = "AKStestCluster"
+dns-prefix = "dnsprexix"
+node-pool-name = "anodepoolname"
