@@ -1,5 +1,5 @@
 terraform {
-    cloud {
+  cloud {
     organization = "AlexMontesinos"
     workspaces {
       name = "Terraform"
