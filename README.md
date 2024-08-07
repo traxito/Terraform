@@ -42,3 +42,12 @@ variable "instance_type" {
 #   error_message = "Invalid Instance Type name. You can only choose - t2.nano,t2.micro,t2.small"
 # }
 }
+
+
+---------
+
+AzDO agent build
+
+Check this video to know how to pass variables wihout hardcode inside the script:
+
+https://www.youtube.com/watch?v=85d-ddaRlkE
