@@ -14,25 +14,25 @@ resource "azurerm_subnet" "subnet-alias" {
   address_prefixes     = ["20.0.2.0/24"]
 }
 
-resource azurerm_network_security_group "nsg-alias" {
+resource "azurerm_network_security_group" "nsg-alias" {
   name                = var.nsg-name
   location            = var.location
   resource_group_name = azurerm_resource_group.rg-alias.name
 
   security_rule {
-    name                       = "Only open RDP for public IP"
-    priority                   = 100
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = "389"
-#only allow ip of the machine that creates of terraform
-    source_address_prefix      = "${chomp(data.http.myip.body)}/32"
+    name                   = "only_open_rdp_for_public_ip"
+    priority               = 100
+    direction              = "Inbound"
+    access                 = "Allow"
+    protocol               = "Tcp"
+    source_port_range      = "*"
+    destination_port_range = "389"
+    #only allow ip of the machine that creates of terraform
+    source_address_prefix     = "${chomp(data.http.myip.body)}"
     destination_address_prefix = "*"
-}
+  }
 
-    tags = {
+  tags = {
     environment = "Windows"
   }
 }
