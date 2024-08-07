@@ -1,7 +1,12 @@
+#mirar el video: https://www.youtube.com/watch?v=_ntiohUA-QA
+
 #random name for VM
 
 resource random_string random-name {
     length = 4
+    special = false
+    lower = true
+    min_lower = 4
 }
 
 resource "random_integer" "random-alias" {
@@ -17,7 +22,7 @@ resource azurerm_resource_group rg-alias {
 }
 
 resource "azurerm_storage_account" "st-alias" {
-  name                     = var.st-name[random_integer.random-alias.result]
+  name                     = var.st-name[random_string.random-name.result]
   resource_group_name      = azurerm_resource_group.rg-alias.name
   location                 = azurerm_resource_group.rg-alias.location
   account_tier             = "Standard"
@@ -89,4 +94,7 @@ resource azurerm_windows_virtual_machine vm-alias {
     version   = "latest"
   }
 
+  depends_on = [
+    data.azurerm_key_vault.kv-alias
+  ]
 }

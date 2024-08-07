@@ -18,8 +18,10 @@ variable "vm-name" {
 }
 
 variable st-name {
-    type = string
-    description = "CAUTION only lower case!!"
+    type = map(string)
+    default = {
+      "name" = "tfwindowsstaccount"
+    }
 }
 
 variable "snet-name" {
