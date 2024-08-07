@@ -17,6 +17,10 @@ locals = {
 
   }
 
+  tags {
+    Name = be_aware_workspace
+    }
+
   be sure about the workspace you are:
 
   output local.be_aware_workspace
