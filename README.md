@@ -20,3 +20,5 @@ locals = {
   be sure about the workspace you are:
 
   output local.be_aware_workspace
+  or
+  terraform workspace show
