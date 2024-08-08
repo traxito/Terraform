@@ -1,9 +1,3 @@
-#variable "rg-name" {
-# type = map(string)
-# default = {
-#   "name" = "rgname"
-# }
-#
 
 variable "rg-name" {
   type        = string
@@ -29,28 +23,9 @@ variable "st-name" {
 
 }
 
-#variable "vm-name" {
-#  type = map(string)
-#  default = {
-#    "name" = "windowsvm"
-#  }
-#}
-#
-#variable "st-name" {
-#  type = map(string)
-#  default = {
-#    "name" = "tfwindowsstaccount"
-#  }
-#}
-#
 variable "snet-name" {
   type        = string
   description = "Name of the subnet for terraform resources"
-}
-
-variable "environment" {
-  type        = string
-  description = "name of the environtment of the AzDevOps Agent"
 }
 
 variable "nsg-name" {

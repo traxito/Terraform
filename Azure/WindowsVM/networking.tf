@@ -5,6 +5,11 @@ resource "azurerm_virtual_network" "vnet-alias" {
   address_space       = ["20.0.0.0/16"]
   location            = var.location
   resource_group_name = azurerm_resource_group.rg-alias.name
+
+  tags = {
+    environment = local.tag
+  }
+
 }
 
 resource "azurerm_subnet" "subnet-alias" {
@@ -12,6 +17,8 @@ resource "azurerm_subnet" "subnet-alias" {
   resource_group_name  = azurerm_resource_group.rg-alias.name
   virtual_network_name = azurerm_virtual_network.vnet-alias.name
   address_prefixes     = ["20.0.2.0/24"]
+
+  
 }
 
 resource "azurerm_network_security_group" "nsg-alias" {
@@ -33,7 +40,7 @@ resource "azurerm_network_security_group" "nsg-alias" {
   }
 
   tags = {
-    environment = "Windows"
+    environment = local.tag
   }
 }
 
@@ -53,15 +60,22 @@ resource "azurerm_network_interface" "NIC-alias" {
     subnet_id                     = azurerm_subnet.subnet-alias.id
     private_ip_address_allocation = "Dynamic"
   }
+
+  tags = {
+    environment = local.tag
+  }
+
 }
 
 resource "azurerm_public_ip" "PIP" {
   name                = "PIP${random_string.random-name.result}"
   resource_group_name = azurerm_resource_group.rg-alias.name
   location            = var.location
-  allocation_method   = "Static"
+  allocation_method   = "Dynamic"
 
   tags = {
-    environment = "Windows"
+    environment = local.tag
   }
+
+  depends_on = [ azurerm_windows_virtual_machine.vm-alias ]
 }

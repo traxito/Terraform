@@ -1,6 +1,6 @@
 #mirar el video: https://www.youtube.com/watch?v=_ntiohUA-QA
 
-#random name for VM
+#variables for unique names
 
 resource "random_string" "random-name" {
   length    = 3
@@ -15,9 +15,10 @@ resource "random_integer" "random-alias" {
 }
 
 locals {
-  rgname = "${var.rg-name}-${random_string.random-name.result}"
-  stname = "${var.st-name}${random_string.random-name.result}"
-  vmname = "${var.vm-name}-${random_string.random-name.result}"
+  rgname = "${terraform.workspace}_${var.rg-name}_${random_integer.random-alias.result}"
+  stname = "${terraform.workspace}${var.st-name}${random_integer.random-alias.result}"
+  vmname = "${terraform.workspace}_${var.vm-name}_${random_integer.random-alias.result}"
+  tag = "${terraform.workspace}"
 
 }
 
@@ -26,6 +27,10 @@ locals {
 resource "azurerm_resource_group" "rg-alias" {
   name     = local.rgname
   location = var.location
+
+  tags = {
+    environment = local.tag
+  }
 }
 
 resource "azurerm_storage_account" "st-alias" {
@@ -36,7 +41,7 @@ resource "azurerm_storage_account" "st-alias" {
   account_replication_type = "LRS"
 
   tags = {
-    environment = "developer"
+    environment = local.tag
   }
 
 }
@@ -101,7 +106,11 @@ resource "azurerm_windows_virtual_machine" "vm-alias" {
     sku       = "2022-datacenter-azure-edition"
     version   = "latest"
   }
-
+  
+  tags = {
+    environment = local.tag
+  }
+  
   depends_on = [
     data.azurerm_key_vault.kv-alias
   ]
