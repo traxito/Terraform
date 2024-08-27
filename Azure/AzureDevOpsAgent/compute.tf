@@ -1,7 +1,7 @@
 #create NIC for the Linux VM
 
-resource azurerm_network_interface NIC-alias {
-  name                = "nic-vm${random_string.NIC.result}"
+resource azurerm_network_interface nic-alias {
+  name                = local.nicname
   location            = var.location
   resource_group_name = azurerm_resource_group.rg-alias.name
 
@@ -11,9 +11,8 @@ resource azurerm_network_interface NIC-alias {
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id = azurerm_public_ip.PIP.id
   }
-
     tags = {
-    environment = var.environment 
+    environment = local.tag
   }
 }
 
@@ -30,8 +29,8 @@ data azurerm_key_vault_secret ssh_public_key {
 
 #VM configuration
 
-resource azurerm_linux_virtual_machine AzDevOpsAgentVM {
-  name                = "vm${random_integer.AzDevOpsAgentVM.result}"
+resource azurerm_linux_virtual_machine vm-name {
+  name                = local.vmname
   resource_group_name = azurerm_resource_group.rg-alias.name
   location            = var.location
   size                = "Standard_DS2_v2"
@@ -56,7 +55,7 @@ resource azurerm_linux_virtual_machine AzDevOpsAgentVM {
     public_key = data.azurerm_key_vault_secret.ssh_public_key.value
   }
   tags = {
-    environment = var.environment 
+    environment = local.tag
   }
 #execute a script inside the VM
 

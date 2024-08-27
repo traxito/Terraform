@@ -1,26 +1,3 @@
-#random string for NIC
-
-resource random_string NIC {
-  length           = 8
-  upper            = false
-  special          = false
-}
-
-#random string for PIP
-
-resource random_string PIP {
-  length           = 8
-  upper            = false
-  special          = false
-}
-
-#random string for VMname
-
-resource "random_integer" "TerraformLinuxVM" {
-  min = 1
-  max = 50000
-}
-
 
 variable "rg-name" {
   type        = string
@@ -51,7 +28,7 @@ variable "st-name" {
   type        = string
   description = "Name of the storage account for terraform resources"
 }
-
+/*
 variable "log-name" {
   type        = string
   description = "Name of the Log analytics for terraform resources"
@@ -61,18 +38,23 @@ variable "kv-name" {
   type        = string
   description = "Name of the Log analytics for terraform resources"
 }
-
+*/
 variable "snet-name" {
   type        = string
   description = "Name of the subnet for terraform resources"
 }
-
+/*
 variable diag-name {
     type = string
     description = "Name of the monitor_diagnostic_setting"
 }
-
-variable environment{
+*/
+variable "vm-name" {
   type = string
-  description = "name of the environtment of the AzDevOps Agent"
+  description = "Name of the vm for the agent"
+}
+
+variable "nic-name" {
+  type = string
+  description = "Name of the vm for the agent"
 }

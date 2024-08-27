@@ -1,4 +1,4 @@
-information to display after resource creation
+#information to display after resource creation
 
 output "rg-name" {
   description = "outputs the rg name"

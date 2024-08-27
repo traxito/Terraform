@@ -98,7 +98,7 @@ resource "azurerm_public_ip" "PIP" {
   name                = "PIP${random_string.PIP.result}"
   resource_group_name = azurerm_resource_group.rg-alias.name
   location            = var.location
-  allocation_method   = "Static"
+  allocation_method   = "Dynamic"
 
   tags = {
     environment = "Terraform"

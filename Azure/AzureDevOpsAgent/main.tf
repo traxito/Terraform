@@ -1,25 +1,55 @@
-#We will make this TF plan to be independent from other TF's, to be able to work alone
+#We will make this TF plan to be independent from other TF's or resources, to be able to work alone
+
+#variables for unique names
+
+resource random_string random-name {
+  length    = 3
+  special   = false
+  lower     = true
+  min_lower = 3
+}
+
+resource random_integer random-alias {
+  min = 1
+  max = 5000
+}
+
+locals {
+  rgname = "${terraform.workspace}_${var.rg-name}_${random_integer.random-alias.result}"
+  stname = "${terraform.workspace}${var.st-name}${random_integer.random-alias.result}"
+  vmname = "${terraform.workspace}_${var.vm-name}_${random_integer.random-alias.result}"
+  vnetname = "${terraform.workspace}_${var.vnet-name}_${random_integer.random-alias.result}"
+  snetname = "${terraform.workspace}_${var.snet-name}_${random_integer.random-alias.result}"
+  nsgname = "${terraform.workspace}_${var.nsg-name}_${random_integer.random-alias.result}"
+  nicname = "${terraform.workspace}_${var.nic-name}_${random_integer.random-alias.result}"
+  tag = "${terraform.workspace}"
+
+}
 
 #store tenant ID
-data "azurerm_client_config" "current" {}
+data azurerm_client_config current {}
 
 #create brand new RG
-resource "azurerm_resource_group" "rg-alias" {
-  name     = var.rg-name
+resource azurerm_resource_group rg-alias {
+  name     = local.rgname
   location = var.location
+
+  tags = {
+    environment = local.tag
+  }
 }
 
 #create brand new st account just for this VM
 
-resource "azurerm_storage_account" "st-alias" {
-  name                     = var.st-name
+resource azurerm_storage_account st-alias {
+  name                     = local.stname
   resource_group_name      = azurerm_resource_group.rg-alias.name
   location                 = azurerm_resource_group.rg-alias.location
   account_tier             = "Standard"
   account_replication_type = "LRS"
 
   tags = {
-    environment = var.environment 
+    environment = local.tag
   }
   
 }
@@ -28,16 +58,20 @@ resource "azurerm_storage_account" "st-alias" {
 
 #Azure VNET
 
-resource azurerm_virtual_network "terraformVNET" {
-  name                = var.vnet-name
+resource azurerm_virtual_network vnet-alias {
+  name                = local.vnetname
   location            = var.location
   resource_group_name = azurerm_resource_group.rg-alias.name
   address_space       = ["20.0.0.0/16"]
 
+  tags = {
+    environment = local.tag
+  }
+
 }
 
 #Azure subnet
-  resource azurerm_subnet snet-name {
+  resource azurerm_subnet snet-alias {
   name                 = var.snet-name  
   resource_group_name  = azurerm_resource_group.rg-alias.name
   virtual_network_name = azurerm_virtual_network.terraformVNET.name
@@ -48,7 +82,7 @@ resource azurerm_virtual_network "terraformVNET" {
 #Azure Network Security Group
 
 resource azurerm_network_security_group "TerraNSG" {
-  name                = var.nsg-name
+  name                = local.nsgname
   location            = var.location
   resource_group_name = azurerm_resource_group.rg-alias.name
 
@@ -67,7 +101,7 @@ resource azurerm_network_security_group "TerraNSG" {
 }
 
   tags = {
-    environment = var.environment 
+    environment = local.tag
   }
 }
 
@@ -85,11 +119,11 @@ resource "azurerm_public_ip" "PIP" {
   allocation_method   = "Static"
 
   tags = {
-    environment = var.environment 
+    environment = local.tag
   }
 }
 
-#Creation of Log Analytics Workspace
+/* #Creation of Log Analytics Workspace
 
 resource azurerm_log_analytics_workspace alias_log {
   name                = var.log-name    
@@ -99,7 +133,7 @@ resource azurerm_log_analytics_workspace alias_log {
   retention_in_days   = 30
 
     tags = {
-    environment = var.environment 
+    environment = local.tag
   }
 
 }
@@ -226,3 +260,4 @@ resource "azurerm_monitor_diagnostic_setting" "diag-kv-alias" {
     }
   }
 }
+*/
