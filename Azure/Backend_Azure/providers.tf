@@ -7,9 +7,9 @@ terraform {
   }
 
     backend "azurerm" {
-    resource_group_name  = azurerm_resource_group.rg-name.name  # Can be passed via `-backend-config=`"resource_group_name=<resource group name>"` in the `init` command.
-    storage_account_name = azurerm_storage_account.st-name.name                     # Can be passed via `-backend-config=`"storage_account_name=<storage account name>"` in the `init` command.
-    container_name       = azurerm_storage_container.stc-name.name
+    resource_group_name  = var.rg-name  # Can be passed via `-backend-config=`"resource_group_name=<resource group name>"` in the `init` command.
+    storage_account_name = var.st-name                    # Can be passed via `-backend-config=`"storage_account_name=<storage account name>"` in the `init` command.
+    container_name       = var.stc-name
 #key is just the name that the tfstate file will have
     key                  = "tfstate"       # Can be passed via `-backend-config=`"key=<blob key name>"` in the `init` command.
   }
