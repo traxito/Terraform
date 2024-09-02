@@ -29,9 +29,9 @@ EOF
 #Install the AZURE AGENT
 
 export AZP_AGENT_NAME=MyLinuxAgent
-export AZP_URL=https://dev.azure.com/deltalabAzure/Space%20Game%20-%20web%20-%20Multistage
-export AZP_TOKEN=3eg56q7rlu2cl4ywhoxud5b4s2yswdhrz3hljbuk2chqo57bgl6q
-export AZP_POOL=MyAgentPool
+export AZP_URL=
+export AZP_TOKEN=
+export AZP_POOL=
 export AZP_AGENT_VERSION=$(curl -s https://api.github.com/repos/microsoft/azure-pipelines-agent/releases | jq -r '.[0].tag_name' | cut -d "v" -f 2)
 
 
