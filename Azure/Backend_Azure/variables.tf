@@ -1,20 +1,20 @@
-variable "rg-name" {
+variable rg-name {
     type        = string
     description = "Name of the resource group"
   
 }
 
-variable "location" {
+variable location {
      type        = string
      description = "location"
 }
 
-variable "st-name" {
+variable st-name {
     type        = string
     description = "Name of the storage account"
 }
 
-variable "stc-name" {
+variable stc-name {
     type = string
     description = "Name of the container inside storage account"
   

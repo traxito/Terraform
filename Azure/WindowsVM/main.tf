@@ -2,14 +2,14 @@
 
 #variables for unique names
 
-resource "random_string" "random-name" {
+resource random_string random-name {
   length    = 3
   special   = false
   lower     = true
   min_lower = 3
 }
 
-resource "random_integer" "random-alias" {
+resource random_integer random-alias {
   min = 1
   max = 5000
 }
@@ -24,7 +24,7 @@ locals {
 
 #Template for basic Windows VM
 
-resource "azurerm_resource_group" "rg-alias" {
+resource azurerm_resource_group rg-alias {
   name     = local.rgname
   location = var.location
 
@@ -33,7 +33,7 @@ resource "azurerm_resource_group" "rg-alias" {
   }
 }
 
-resource "azurerm_storage_account" "st-alias" {
+resource azurerm_storage_account st-alias {
   name                     = local.stname
   resource_group_name      = azurerm_resource_group.rg-alias.name
   location                 = azurerm_resource_group.rg-alias.location
@@ -47,26 +47,26 @@ resource "azurerm_storage_account" "st-alias" {
 }
 #we tell Terraform to connect to KV
 
-data "azurerm_key_vault" "kv-alias" {
+data azurerm_key_vault kv-alias {
   name                = "kv-principal-Deltalab"
   resource_group_name = "kv-rg"
 }
 
 #reference to already created admin username and password on KV
 
-data "azurerm_key_vault_secret" "kv-secret-alias" {
+data azurerm_key_vault_secret kv-secret-alias {
   #the name should be the same that is on the KV
   name         = "windows-local-admin-account"
   key_vault_id = data.azurerm_key_vault.kv-alias.id
 }
 
-data "azurerm_key_vault_secret" "kv-secret-alias-2" {
+data azurerm_key_vault_secret kv-secret-alias-2 {
   #the name should be the same that is on the KV
   name         = "windows-local-account-password"
   key_vault_id = data.azurerm_key_vault.kv-alias.id
 }
 
-resource "azurerm_windows_virtual_machine" "vm-alias" {
+resource azurerm_windows_virtual_machine vm-alias {
   name                = local.vmname
   resource_group_name = azurerm_resource_group.rg-alias.name
   location            = var.location

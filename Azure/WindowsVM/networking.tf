@@ -44,12 +44,12 @@ resource azurerm_network_security_group nsg-alias {
 }
 
 #only allow ip of the machine that creates of terraform
-data "http" "myip" {
+data http myip {
   url = "http://ipv4.icanhazip.com"
 }
 
 
-resource "azurerm_network_interface" "NIC-alias" {
+resource azurerm_network_interface NIC-alias {
   name                = "nic-vm${random_string.random-name.result}"
   location            = var.location
   resource_group_name = azurerm_resource_group.rg-alias.name
@@ -66,7 +66,7 @@ resource "azurerm_network_interface" "NIC-alias" {
 
 }
 
-resource "azurerm_public_ip" "PIP" {
+resource azurerm_public_ip PIP {
   name                = "PIP${random_string.random-name.result}"
   resource_group_name = azurerm_resource_group.rg-alias.name
   location            = var.location

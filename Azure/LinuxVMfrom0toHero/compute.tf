@@ -1,17 +1,3 @@
-#variables for unique names
-
-resource "random_string" "random-name" {
-  length    = 3
-  special   = false
-  lower     = true
-  min_lower = 3
-}
-
-resource "random_integer" "random-alias" {
-  min = 1
-  max = 5000
-}
-
 #create NIC for the Linux VM
 
 resource azurerm_network_interface NIC-alias {
@@ -31,7 +17,7 @@ resource azurerm_network_interface NIC-alias {
   }
 }
 
-#Get access to KV and push the public ssh key
+#Get access to KV and pull the public ssh key
 
 data azurerm_key_vault kv-alias {
   name                = azurerm_key_vault.kv-alias.name

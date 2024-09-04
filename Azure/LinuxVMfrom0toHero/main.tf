@@ -10,18 +10,18 @@
 # també mirar ${terraform.workspace} com a variable canviant de workspace segons sigui Dev Prod etc!
 
 #store tenant ID
-data "azurerm_client_config" "current" {}
+data azurerm_client_config current {}
 
 #variables for unique names
 
-resource "random_string" "random-name" {
+resource random_string random-name {
   length    = 3
   special   = false
   lower     = true
   min_lower = 3
 }
 
-resource "random_integer" "random-alias" {
+resource random_integer random-alias {
   min = 1
   max = 5000
 }
@@ -35,7 +35,7 @@ locals {
 }
 
 #create brand new RG
-resource "azurerm_resource_group" "rg-alias" {
+resource azurerm_resource_group rg-alias {
   name     = local.rgname
   location = var.location
 
@@ -47,7 +47,7 @@ resource "azurerm_resource_group" "rg-alias" {
 
 #create brand new st account just for this VM
 
-resource "azurerm_storage_account" "st-alias" {
+resource azurerm_storage_account st-alias {
   name                     = local.stname
   resource_group_name      = azurerm_resource_group.rg-alias.name
   location                 = azurerm_resource_group.rg-alias.location
@@ -64,7 +64,7 @@ resource "azurerm_storage_account" "st-alias" {
 
 #Azure VNET
 
-resource azurerm_virtual_network "vnet-alias" {
+resource azurerm_virtual_network vnet-alias {
   name                = var.vnet-name
   location            = var.location
   resource_group_name = azurerm_resource_group.rg-alias.name
@@ -119,7 +119,7 @@ data "http" "myip" {
 
 #Public IP configuration
 
-resource "azurerm_public_ip" "PIP" {
+resource azurerm_public_ip PIP {
   name                = "PIP${random_string.PIP.result}"
   resource_group_name = azurerm_resource_group.rg-alias.name
   location            = var.location
