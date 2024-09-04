@@ -14,21 +14,11 @@ resource random_string PIP {
   special          = false
 }
 
-#random string for VMname
-
-resource "random_integer" "TerraformLinuxVM" {
-  min = 1
-  max = 50000
-}
-
-
 variable "rg-name" {
-  type        = map(string)
+  type        = string
   description = "Name of the RG"
-  default = {
-    "rg-name" = "terraformrglinux"
   }
-}
+
 
 variable "location" {
   type        = string
@@ -51,11 +41,8 @@ variable "vnet-name" {
 }
 
 variable "st-name" {
-  type        = map(string)
+  type        = string
   description = "Name of the storage account for terraform resources"
-  default = {
-    "st-name" = "terraformtorageaccount"
-  }
 }
 
 variable "log-name" {
@@ -81,4 +68,10 @@ variable diag-name {
 variable environment{
   type = string
   description = "name of the environtment of the AzDevOps Agent"
+}
+
+variable "vm-name" {
+  type = string
+  description = "name of the Linux VM"
+  
 }

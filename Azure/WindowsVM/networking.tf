@@ -1,6 +1,6 @@
 
 #basic networking attributes
-resource "azurerm_virtual_network" "vnet-alias" {
+resource azurerm_virtual_network vnet-alias {
   name                = var.vnet-name
   address_space       = ["20.0.0.0/16"]
   location            = var.location
@@ -9,10 +9,9 @@ resource "azurerm_virtual_network" "vnet-alias" {
   tags = {
     environment = local.tag
   }
-
 }
 
-resource "azurerm_subnet" "subnet-alias" {
+resource azurerm_subnet subnet-alias {
   name                 = var.snet-name
   resource_group_name  = azurerm_resource_group.rg-alias.name
   virtual_network_name = azurerm_virtual_network.vnet-alias.name
@@ -21,7 +20,7 @@ resource "azurerm_subnet" "subnet-alias" {
   
 }
 
-resource "azurerm_network_security_group" "nsg-alias" {
+resource azurerm_network_security_group nsg-alias {
   name                = var.nsg-name
   location            = var.location
   resource_group_name = azurerm_resource_group.rg-alias.name

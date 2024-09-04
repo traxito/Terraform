@@ -1,3 +1,17 @@
+#variables for unique names
+
+resource "random_string" "random-name" {
+  length    = 3
+  special   = false
+  lower     = true
+  min_lower = 3
+}
+
+resource "random_integer" "random-alias" {
+  min = 1
+  max = 5000
+}
+
 #create NIC for the Linux VM
 
 resource azurerm_network_interface NIC-alias {
@@ -13,7 +27,7 @@ resource azurerm_network_interface NIC-alias {
   }
 
     tags = {
-    environment = "Terraform"
+    environment = local.tag
   }
 }
 
@@ -24,6 +38,7 @@ data azurerm_key_vault kv-alias {
   resource_group_name = azurerm_resource_group.rg-alias.name
 }
 data azurerm_key_vault_secret ssh_public_key {
+  #the name should be the same that is on the KV
   name         = "ssh-public"
   key_vault_id = data.azurerm_key_vault.kv-alias.id
 }
@@ -58,7 +73,7 @@ resource azurerm_linux_virtual_machine TerraformLinuxVM {
   }
 
   tags = {
-    environment = "Terraform"
+    environment = local.tag
   }
 
 }

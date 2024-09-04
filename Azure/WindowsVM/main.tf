@@ -55,11 +55,13 @@ data "azurerm_key_vault" "kv-alias" {
 #reference to already created admin username and password on KV
 
 data "azurerm_key_vault_secret" "kv-secret-alias" {
+  #the name should be the same that is on the KV
   name         = "windows-local-admin-account"
   key_vault_id = data.azurerm_key_vault.kv-alias.id
 }
 
 data "azurerm_key_vault_secret" "kv-secret-alias-2" {
+  #the name should be the same that is on the KV
   name         = "windows-local-account-password"
   key_vault_id = data.azurerm_key_vault.kv-alias.id
 }
