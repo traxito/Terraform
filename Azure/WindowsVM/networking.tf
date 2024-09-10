@@ -63,6 +63,8 @@ resource azurerm_network_interface NIC-alias {
   tags = {
     environment = local.tag
   }
+  
+depends_on = [ vm-alias ]
 
 }
 
