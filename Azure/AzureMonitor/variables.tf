@@ -1,9 +1,9 @@
-variable "rg-name" {
+variable rg-name {
   type        = string
   description = "Name of the Resource Group for terraform resources"
 }
 
-variable "location" {
+variable location {
   type        = string
   description = "Location of the Resource Group for terraform resources"
 }

@@ -27,7 +27,7 @@ resource azurerm_log_analytics_workspace alias_log {
   retention_in_days   = 30
 }
 
-data "azurerm_subscription" "current" {
+data azurerm_subscription current {
 }
 
 resource azurerm_monitor_diagnostic_setting alias_activity_logs {

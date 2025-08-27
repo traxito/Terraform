@@ -13,17 +13,18 @@ resource azurerm_network_interface NIC-alias {
   }
 
     tags = {
-    environment = "Terraform"
+    environment = local.tag
   }
 }
 
-#Get access to KV and push the public ssh key
+#Get access to KV and pull the public ssh key
 
 data azurerm_key_vault kv-alias {
   name                = azurerm_key_vault.kv-alias.name
   resource_group_name = azurerm_resource_group.rg-alias.name
 }
 data azurerm_key_vault_secret ssh_public_key {
+  #the name should be the same that is on the KV
   name         = "ssh-public"
   key_vault_id = data.azurerm_key_vault.kv-alias.id
 }
@@ -58,7 +59,7 @@ resource azurerm_linux_virtual_machine TerraformLinuxVM {
   }
 
   tags = {
-    environment = "Terraform"
+    environment = local.tag
   }
 
 }

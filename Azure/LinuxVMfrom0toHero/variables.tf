@@ -14,61 +14,48 @@ resource random_string PIP {
   special          = false
 }
 
-#random string for VMname
-
-resource "random_integer" "TerraformLinuxVM" {
-  min = 1
-  max = 50000
-}
-
-
-variable "rg-name" {
-  type        = map(string)
+variable rg-name {
+  type        = string
   description = "Name of the RG"
-  default = {
-    "rg-name" = "terraformrglinux"
   }
-}
 
-variable "location" {
+
+variable location {
   type        = string
   description = "Location of the resource group."
 }
 
-variable "username" {
+variable username {
   type        = string
   description = "The username for the local account that will be created on the new VM."
 }
 
-variable "nsg-name" {
+variable nsg-name {
   type        = string
   description = "Name of the NSG for terraform resources"
 }
 
-variable "vnet-name" {
+variable vnet-name {
   type        = string
   description = "Name of the VNET for terraform resources"
 }
 
-variable "st-name" {
-  type        = map(string)
+variable st-name {
+  type        = string
   description = "Name of the storage account for terraform resources"
-  default = {
-    "st-name" = "terraformtorageaccount"
-  }
 }
 
-variable "log-name" {
+variable log-name {
   type        = string
   description = "Name of the Log analytics for terraform resources"
 }
 
-variable "kv-name" {
+variable kv-name {
   type        = string
   description = "Name of the Log analytics for terraform resources"
 }
 
-variable "snet-name" {
+variable snet-name {
   type        = string
   description = "Name of the subnet for terraform resources"
 }
@@ -81,4 +68,10 @@ variable diag-name {
 variable environment{
   type = string
   description = "name of the environtment of the AzDevOps Agent"
+}
+
+variable vm-name {
+  type = string
+  description = "name of the Linux VM"
+  
 }

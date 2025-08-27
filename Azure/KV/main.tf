@@ -1,16 +1,16 @@
 
-data "azurerm_client_config" "current" {}
+data azurerm_client_config current {}
 
 #create brand new RG
 #name bust me UNIQUE and not random
-resource "azurerm_resource_group" "rg-alias" {
+resource azurerm_resource_group rg-alias {
   name     = var.rg-name
   location = var.location
 }
 
 #create a st account
 #name bust me UNIQUE and not random
-resource "azurerm_storage_account" "st-alias" {
+resource azurerm_storage_account st-alias {
   name                     = var.st-name
   resource_group_name      = azurerm_resource_group.rg-alias.name
   location                 = azurerm_resource_group.rg-alias.location
@@ -25,7 +25,7 @@ resource "azurerm_storage_account" "st-alias" {
 
 #Creation of Log Analytics Workspace
 
-resource "azurerm_log_analytics_workspace" "alias_log" {
+resource azurerm_log_analytics_workspace alias_log {
   name                = var.log-name
   location            = var.location
   resource_group_name = azurerm_resource_group.rg-alias.name
@@ -33,10 +33,10 @@ resource "azurerm_log_analytics_workspace" "alias_log" {
   retention_in_days   = 30
 }
 
-data "azurerm_subscription" "current" {
+data azurerm_subscription current {
 }
 
-resource "azurerm_monitor_diagnostic_setting" "alias_activity_logs" {
+resource azurerm_monitor_diagnostic_setting alias_activity_logs {
   name                       = var.diag-name
   target_resource_id         = data.azurerm_subscription.current.id
   storage_account_id         = azurerm_storage_account.st-alias.id
@@ -104,7 +104,7 @@ resource "azurerm_monitor_diagnostic_setting" "alias_activity_logs" {
 #creation of the azure key vault
 
 
-resource "azurerm_key_vault" "kv-alias" {
+resource azurerm_key_vault kv-alias {
   name                       = var.kv-name
   location                   = var.location
   resource_group_name        = azurerm_resource_group.rg-alias.name
@@ -130,7 +130,7 @@ resource "azurerm_key_vault" "kv-alias" {
 
 #configure audit of the KV
 
-resource "azurerm_monitor_diagnostic_setting" "diag-kv-alias" {
+resource azurerm_monitor_diagnostic_setting diag-kv-alias {
   name               = var.kv-name
   target_resource_id = azurerm_key_vault.kv-alias.id
   storage_account_id = azurerm_storage_account.st-alias.id

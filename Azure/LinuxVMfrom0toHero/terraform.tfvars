@@ -1,14 +1,14 @@
 #variables
 
-#rg-name = "terraformrglinux"
+rg-name = "linxrg"
 location = "westeurope"
 username = "azureadmin"
-nsg-name = "terraformnsg"
-vnet-name = "terraformvnet"
-#st-name = "terraformtorageaccount"
-log-name = "terraformloganalytics"
-kv-name = "terraformkeyvault"
-snet-name = "terraformsubnet"
-diag-name = "terraformlogsworkspace"
-environment = "Dev"
+nsg-name = "linuxnsg"
+vnet-name = "linuxvnet"
+st-name = "linuxstorageaccount"
+log-name = "linuxloganalytics"
+kv-name = "linuxkeyvault"
+snet-name = "linuxsubnet"
+diag-name = "linuxlogsworkspace"
+vm-name = "linuxvm"
 
